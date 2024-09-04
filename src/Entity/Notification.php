@@ -45,4 +45,5 @@ class Notification
     {
         $this->utilisateur = $utilisateur;
     }
+    //intervention de mailer pour notif
 }

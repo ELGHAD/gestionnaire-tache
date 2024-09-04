@@ -20,30 +20,30 @@ class Manager extends Utilisateur
         $this->tasks = new ArrayCollection();
     }
 
-    // Méthodes spécifiques au Manager...
+
 
     public function manageProject()
     {
-        // Logic to manage project
+
     }
 
     public function createTask()
     {
-        // Logic to create task
+
     }
 
     public function editTask()
     {
-        // Logic to edit task
+
     }
 
     public function deleteTask()
     {
-        // Logic to delete task
+
     }
 
     public function assignTask()
     {
-        // Logic to assign task
+
     }
 }

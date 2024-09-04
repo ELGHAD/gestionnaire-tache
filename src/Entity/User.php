@@ -21,11 +21,11 @@ class User extends Utilisateur
 
     public function updateTaskStatus()
     {
-        // Logic to update task status
+
     }
 
     public function viewTaskDetails()
     {
-        // Logic to view task details
+
     }
 }
