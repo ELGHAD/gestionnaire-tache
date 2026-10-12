@@ -1,113 +1,178 @@
-# Gestionnaire de Tâches (Symfony)
+# Task & Project Management — Symfony
 
-> Modélisation de domaine pour une future application de gestion de tâches et de projets, avec entités Doctrine et enums PHP.
+A Symfony-based project exploring the domain model of a team task management system using Doctrine ORM, relational entities, and native PHP enums.
 
 ![PHP](https://img.shields.io/badge/PHP-8.1%2B-777BB4?style=flat&logo=php&logoColor=white)
 ![Symfony](https://img.shields.io/badge/Symfony-5.4-000000?style=flat&logo=symfony&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Work%20in%20Progress-orange)
-![License](https://img.shields.io/badge/License-Not%20specified-lightgrey)
+![Doctrine](https://img.shields.io/badge/Doctrine-ORM-FC6A31?style=flat)
+![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Modeling%20Stage-orange?style=flat)
+![License](https://img.shields.io/badge/License-Not%20specified-lightgrey?style=flat)
 
-## Aperçu du projet
+## Overview
 
-Ce projet pose les fondations d'une application de gestion de tâches en équipe (utilisateurs, projets, tâches) avec le framework Symfony et l'ORM Doctrine. Il modélise un domaine métier avec trois rôles utilisateurs (Admin, Manager, User) via un héritage d'entités, des projets contenant des tâches, et un système de notifications.
+This project establishes the initial domain model for a team-oriented task and project management application. It uses Symfony and Doctrine ORM to represent users, projects, tasks, and notifications, with typed enums for business states and priorities.
 
-**État actuel : projet en phase de modélisation.** La couche métier (contrôleurs, routes, formulaires, sécurité applicative) n'est pas encore implémentée — seule la structure de données (entités, enums, repositories générés) est en place.
+**Current status: early development — domain modeling only.** The repository primarily contains entities, enums, and generated repositories. The application does not yet provide complete CRUD workflows, authentication, authorization, or a functional user interface.
 
-## Fonctionnalités prévues (modélisées, non implémentées)
+## Domain Model
 
-- Hiérarchie d'utilisateurs — `Utilisateur` (classe de base) avec trois sous-types (`Admin`, `Manager`, `User`) via l'héritage Doctrine par jointure (`InheritanceType('JOINED')`), discriminés par un champ `role`.
-- Gestion de projets — entité `Project` avec statut (`ProjectStatus`), échéance, et collection de tâches associées.
-- Gestion de tâches — entité `Task` avec priorité (`Priority`), statut (`TaskStatus`), échéance, rattachée à un projet et à un utilisateur assigné.
-- Notifications — entité `Notification` liée à un utilisateur (le code laisse une note pour une future intégration du composant Mailer).
-- Enums métier typés — `Role`, `ProjectStatus`, `TaskStatus`, `Priority`, implémentés en enums PHP natifs (`backed enum`) et intégrés directement dans le typage Doctrine (`enumType`).
+The current model covers the following concepts:
 
-## Architecture & Stack technique
+- **User hierarchy:** a base `Utilisateur` entity with `Admin`, `Manager`, and `User` subtypes, designed around Doctrine's joined inheritance mapping.
+- **Project management:** a `Project` entity with descriptive fields, a deadline, a status, and an associated collection of tasks.
+- **Task management:** a `Task` entity with a description, deadline, status, priority, associated project, and assigned user.
+- **Notifications:** a `Notification` entity associated with a user, intended as a foundation for future notification workflows.
+- **Typed business values:** native PHP enums for user roles, project statuses, task statuses, and priorities.
 
-| Élément | Détail |
+These features describe the intended domain structure; the corresponding application workflows are not yet implemented.
+
+## Technology Stack
+
+| Technology | Purpose |
 |---|---|
-| **Framework** | Symfony 5.4 |
-| **Langage** | PHP 8.1+ (nécessaire pour les enums natifs) |
-| **ORM** | Doctrine ORM 2.19, avec Doctrine Migrations |
-| **Base de données** | MySQL (à configurer via `.env`, absent du dépôt) |
-| **Templating** | Twig (uniquement le layout de base généré, aucune vue métier) |
-| **Génération de code** | Symfony Maker Bundle (entités et repositories scaffoldés) |
+| PHP 8.1+ | Backend language and native enums |
+| Symfony 5.4 | Application framework |
+| Doctrine ORM | Entity mapping and persistence |
+| Doctrine Migrations | Database schema versioning |
+| MySQL | Intended relational database |
+| Twig | Base template structure |
+| Symfony Maker Bundle | Initial entity and repository scaffolding |
 
-**Entités et enums :**
+## Architecture
 
-| Fichier | Rôle |
-|---|---|
-| `Entity/Utilisateur.php` | Classe de base des utilisateurs (héritage JOINED, discriminant `role`) |
-| `Entity/Admin.php`, `Manager.php`, `User.php` | Sous-types d'utilisateur avec méthodes métier à implémenter |
-| `Entity/Project.php` | Projet (nom, description, échéance, statut, tâches) |
-| `Entity/Task.php` | Tâche (nom, description, échéance, statut, priorité, projet, utilisateur assigné) |
-| `Entity/Notification.php` | Notification liée à un utilisateur |
-| `Enum/Role.php`, `ProjectStatus.php`, `TaskStatus.php`, `Priority.php` | Enums métier typés |
+The current codebase is organized around the domain model and persistence layer.
 
-## Installation & Démarrage rapide
+```text
+Symfony Application
+├── Domain Model
+│   ├── Utilisateur
+│   │   ├── Admin
+│   │   ├── Manager
+│   │   └── User
+│   ├── Project
+│   │   └── Task
+│   └── Notification
+├── Business Enums
+│   ├── Role
+│   ├── ProjectStatus
+│   ├── TaskStatus
+│   └── Priority
+├── Doctrine Repositories
+├── Database Migrations
+└── Base Twig Template
+```
 
-### Prérequis
-- PHP 8.1+
+The model is intended to connect users, projects, and tasks through Doctrine relationships. The inheritance mapping and entity associations still need validation before the project can be considered runnable.
+
+## Project Structure
+
+```text
+gestionnaire-tache/
+├── src/
+│   ├── Entity/
+│   │   ├── Utilisateur.php
+│   │   ├── Admin.php
+│   │   ├── Manager.php
+│   │   ├── User.php
+│   │   ├── Project.php
+│   │   ├── Task.php
+│   │   └── Notification.php
+│   ├── Enum/
+│   │   ├── Role.php
+│   │   ├── ProjectStatus.php
+│   │   ├── TaskStatus.php
+│   │   └── Priority.php
+│   ├── Repository/
+│   └── Controller/
+├── config/
+├── migrations/
+├── templates/
+│   └── base.html.twig
+└── composer.json
+```
+
+## Getting Started
+
+### Prerequisites
+
+- PHP 8.1 or later
 - Composer
 - MySQL
-- Symfony CLI (recommandé)
+- Required PHP extensions for the installed Symfony and Doctrine packages
 
-### Étapes
+### Installation
+
+Clone the repository and install its dependencies:
 
 ```bash
 git clone https://github.com/ELGHAD/gestionnaire-tache.git
 cd gestionnaire-tache
-
 composer install
-
-# Créer le fichier .env (absent du dépôt) et configurer la connexion DB
-cp .env.test .env
-# Éditer DATABASE_URL dans .env, ex :
-# DATABASE_URL="mysql://user:password@127.0.0.1:3306/gestionnaire_tache"
-
-php bin/console doctrine:database:create
-php bin/console doctrine:migrations:migrate
-
-symfony server:start
-# ou
-php -S localhost:8000 -t public/
 ```
 
-> À ce stade, l'application ne propose aucune route fonctionnelle : ces étapes permettent de vérifier que le schéma de base de données se crée correctement à partir des entités, pas encore de naviguer sur un site.
+Configure the database connection in your local `.env` file. Use the repository's actual environment template if one exists; otherwise, create a local configuration based on Symfony's environment-variable conventions.
 
-## Structure du projet
-    gestionnaire-tache/
-    ├── src/
-    │ ├── Entity/ # Utilisateur, Admin, Manager, User, Project, Task, Notification
-    │ ├── Enum/ # Role, ProjectStatus, TaskStatus, Priority
-    │ ├── Repository/ # Repositories Doctrine générés (add/remove)
-    │ ├── Controller/ # Vide — aucun contrôleur pour l'instant
-    │ └── Kernel.php
-    ├── config/ # Configuration Symfony (packages, routes, sécurité)
-    ├── migrations/ # Migrations Doctrine
-    ├── templates/
-    │ └── base.html.twig # Layout de base uniquement
-    └── composer.json
-## Points d'attention avant de présenter ce projet
+Example MySQL connection string:
 
-- **Bugs à corriger dans les entités** — `Project::getIdProject()`/`setIdProject()`, `Utilisateur::getIdUtilisateur()` et `Task::getIdTask()` référencent des propriétés inexistantes (`$id` est le seul champ identifiant réellement déclaré) ; `Manager.php` et `User.php` utilisent `Collection`/`ArrayCollection` sans les importer. Ces erreurs empêcheraient le projet de fonctionner en l'état.
-- **Aucune logique métier implémentée** — toutes les méthodes des entités (gestion des utilisateurs, projets, tâches) sont des coquilles vides à compléter.
-- **Aucun contrôleur ni route** — le projet n'expose actuellement aucune page ou API.
-- **`var/cache/` ne devrait pas être versionné** — plusieurs centaines de fichiers de cache Symfony sont présents dans le dépôt ; à ajouter au `.gitignore` et à retirer de l'historique Git.
-- **`.env` absent** — nécessaire pour que quiconope puisse cloner et lancer le projet.
+```dotenv
+DATABASE_URL="mysql://user:password@127.0.0.1:3306/gestionnaire_tache"
+```
 
-## Prochaines étapes suggérées
+After validating the entity mappings and migration configuration, create the database and apply migrations:
 
-1. Corriger les bugs de mapping Doctrine dans les entités.
-2. Générer les contrôleurs et routes CRUD pour `Project` et `Task` (`php bin/console make:crud`).
-3. Implémenter l'authentification (Symfony Security) pour distinguer Admin/Manager/User.
-4. Ajouter un `.env.example` et nettoyer `var/cache/` du dépôt.
-5. Ajouter des tests unitaires sur la logique métier une fois implémentée.
+```bash
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+```
 
-## Auteur & Contact
+To start the Symfony development server, if Symfony CLI is installed:
 
-**Hamza Elrhadiouini**
-Étudiant Ingénieur en Génie Logiciel (MIAGE) — EMSI Rabat
+```bash
+symfony server:start
+```
 
-- GitHub : [@ELGHAD](https://github.com/ELGHAD)
-- Portfolio : [elghad.github.io/hamza-elrhadiouini-portfolio](https://elghad.github.io/hamza-elrhadiouini-portfolio)
-- Email : [hamelrhadiouini@gmail.com](mailto:hamelrhadiouini@gmail.com)
+**Important:** These steps are intended for local setup and schema validation. The repository does not currently implement complete application routes or workflows, and the entity mapping must be corrected and verified before successful database initialization can be expected.
+
+## Engineering Concepts
+
+This project provides a starting point for exploring:
+
+- Domain modeling with PHP classes and Doctrine entities
+- Object-oriented design and entity inheritance
+- Relational associations between users, projects, and tasks
+- Native PHP enums for representing constrained business values
+- Repository-based persistence and database migrations
+- The separation of domain data from future controllers and presentation logic
+
+## Known Limitations
+
+The repository is a work in progress and requires further implementation:
+
+- Some entity accessor methods reference identifier properties that are not declared under those names.
+- `Manager.php` and `User.php` may require missing Doctrine collection imports.
+- Entity methods and business rules remain incomplete.
+- Controllers, functional routes, authentication, and authorization are not yet implemented.
+- Database configuration and environment setup need to be documented and verified.
+- Generated cache files should not be committed; the Git history and `.gitignore` should be reviewed.
+
+The project should not be considered production-ready.
+
+## Planned Improvements
+
+1. Correct entity mappings, identifiers, inheritance configuration, and collection initialization.
+2. Validate the schema using Doctrine mapping checks and migrations.
+3. Implement project and task CRUD workflows.
+4. Add authentication and authorization with Symfony Security.
+5. Enforce role-specific permissions for administrators, managers, and users.
+6. Add automated tests for domain rules and persistence.
+7. Provide an environment example file and clean repository configuration.
+8. Add a functional interface and document setup with reproducible instructions.
+
+## Author
+
+**Hamza Elrhadiouini**  
+Software Engineering
+
+- GitHub: [@ELGHAD](https://github.com/ELGHAD)
+- Portfolio: [elghad.github.io/hamza-elrhadiouini-portfolio](https://elghad.github.io/hamza-elrhadiouini-portfolio)
